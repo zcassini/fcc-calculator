@@ -1,60 +1,192 @@
 import $ from 'jquery'
-// $('html').keyup(function(e){if(e.keyCode == 8)alert('backspace trapped')})  
-// Bind keydown event to this function.  Replace document with jQuery selector
-// to only bind to that element.
-// $(document).keydown(function(e){
 
-//     // Use jquery's constants rather than an unintuitive magic number.
-//     // $.ui.keyCode.DELETE is also available. <- See how constants are better than '46'?
-//     if (e.keyCode == $.ui.keyCode.BACKSPACE) {
+var current = 0
+var result = 0
+var operator = ''
+var lastVal = 0
 
-//         // Filters out events coming from any of the following tags so Backspace
-//         // will work when typing text, but not take the page back otherwise.
-//         var rx = /INPUT|SELECT|TEXTAREA/i;
-//         if(!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly ){
-//             e.preventDefault();
-//         }
-
-//        // Add your code here.
-//      }
-// });
-$(function(){
+$(function () {
     /*
      * this swallows backspace keys on any non-input element.
      * stops backspace -> back
      */
-    var rx = /INPUT|SELECT|TEXTAREA/i;
+  var rx = /INPUT|SELECT|TEXTAREA/i
 
-    $(document).bind("keydown keypress", function(e){
-        if( e.which == 8 ){ // 8 == backspace
-            if(!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly ){
-                e.preventDefault();
-            }
-        }
-    });
-});
-$(document).keypress(function (e) {
-  // e.preventDefault()
-  // if (e.which == 13) {
-  //   console.log('gggg')
-  // }
-  if (e.keyCode == 8) {
-    console.log('bs') 
-    e.preventDefault()
-  }
-  console.log(e.keyCode)
-  //49-57 0-9
-  // 43-47 +-*/
-  // enter 13
-  //c
+  $(document).bind('keydown keypress', function (e) {
+    if (e.which === 8) { // 8 == backspace
+      if (!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly) {
+        e.preventDefault()
+      }
+    }
+  })
 })
 
-$(window).on("navigate", function (event, data) {
-  var direction = data.state.direction;
-  if ( !! direction) {
-    // alert(direction)
-    console.log('dsjka,kdfkjsdahfkjasd')
+$('#display').keypress(e => e.preventDefault())
+
+// $(document).keypress(function (e) {
+//   switch (e.which) {
+//     case 13:
+//       console.log('enter')
+//       enter()
+//       break
+//     case 42:
+//       console.log('multiply')
+//       multiply()
+//       break
+//     case 43:
+//       console.log('add')
+//       add()
+//       break
+//     case 45:
+//       console.log('subtract')
+//       subtract()
+//       break
+//     case 47:
+//       console.log('divide')
+//       divide()
+//       break
+//     default:
+//     // console.log(e.which)
+//       if (/\d+|\./.test(String.fromCharCode(e.which)) === true) {
+//         $('#display').val($('#display').val() + String.fromCharCode(e.keyCode))
+//         $(`#${e.keyCode}`).click()
+//         console.log('hi')
+//         $('#plus').click(e)
+//       }
+//   }
+// })
+
+$(document).keydown(function (e) {
+  document.getElementById('sndKeyDown').play()
+  console.log(String.fromCharCode(e.which))
+  switch (e.keyCode) {
+  case 13:
+    console.log('enter')
+    $('#enter').toggleClass('press')
+    break
+  case 42:
+    console.log('multiply')
+    $('#multiply').toggleClass('press')
+    break
+  case 43:
+    console.log('add')
+    $('#plus').toggleClass('press')
+    break
+  case 45:
+    console.log('subtract')
+    $('#subtract').toggleClass('press')
+    subtract()
+    break
+  case 47:
+    $('#divide').toggleClass('press')
+    console.log('divide')
+    divide()
+    break
+  default:
+    // console.log(e.which)
+    if (/\d+|\./.test(String.fromCharCode(e.which)) === true) {
+      $('#display').val($('#display').val() + String.fromCharCode(e.keyCode))
+      $(`#${e.keyCode}`).click()
+      console.log('hi')
+      $('#plus').click(e)
+     
+    }
   }
 })
-//$('#1').on('click ')
 
+$(document).keyup(function (e) {
+  document.getElementById('sndKeyUp').play()
+  switch (e.keyCode) {
+    case 13:
+      console.log('enter')
+    $('#enter').toggleClass('press')
+      enter()
+      break
+    case 42:
+    $('#multiply').toggleClass('press')
+      console.log('multiply')
+      multiply()
+      break
+    case 43:
+      console.log('add')
+      add()
+      break
+    case 45:
+      console.log('subtract')
+      subtract()
+      break
+    case 47:
+      console.log('divide')
+      divide()
+      break
+    default:
+     console.log(e.which)
+      if (/\d+|\./.test(String.fromCharCode(e.which)) === true) {
+        $('#display').val($('#display').val() + String.fromCharCode(e.keyCode))
+        $(`#${e.keyCode}`).click()
+        // console.log('hi')
+        // $('#plus').click(e)
+      }
+  }
+})
+
+var numberKeys = [1,2,3,4,5,6,7,8,9,0]
+
+for (let key of numberKeys) {
+  $(`#${key}`).click(function (e) {
+    $('#display').val($('#display').val() + key)
+  })}
+
+var actionKeys = ['plus', 'minus', 'divide', 'multiply', 'enter', 'clear']
+
+for (let key of actionKeys) {
+  $(`#${key}`).click(function (e) {
+    $('#display').val($('#display').val() + key)
+  })}
+
+// function rtl(element)
+// {
+//   if(element.setSelectionRange){
+//     element.setSelectionRange(0,0);
+//   }
+// }
+
+function multiply () {
+  operator = '*'
+  process()
+}
+
+function divide () {
+  operator = '/'
+  process()
+}
+
+function add () {
+  operator = '+'
+  process()
+}
+
+function subtract () {
+  operator = '-'
+  process()
+}
+
+function process () {
+  lastVal = $('#display').val()
+  cleardisplay()
+}
+
+function cleardisplay () {
+  $('#display').val('')
+}
+
+function enter () {
+  var currentVal = $('#display').val()
+  result = eval(`${currentVal} ${operator} ${lastVal}`)
+  console.log ( result )
+  $('#display').val(result)
+}
+
+function playSound () {
+  document.getElementById('audio').play()
+}

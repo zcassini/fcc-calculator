@@ -1,29 +1,37 @@
 body
-  h1 Worlds Best Calculator
-  div
-    input#display(type='text')
-  div
-    button#clear C
-    button#slash /
-    button#asterix *
-    button#minu -
-  div
-    button#7 7
-    button#8 8
-    button#9 9
-    button#plus +
-  div
-    button#4 4
-    button#5 5
-    button#6 6
-    button
-  div
-    button#1 1
-    button#2 2
-    button#3 3
-    button#enter Enter
-  div
-    button#0 0
-    button#period .
-    button
-    button
+  h1 Fcc Calculator
+
+  div.calculator
+    div
+      // input#display(type='text', dir='rtl', val='0', onkeyup='rtl(this)')
+      input#display(type='text', dir='rtl', val='0')
+    section
+      div#left
+        div
+          button#clear C
+          button#slash /
+          button#asterix *
+        div
+          button#7 7
+          button#8 8
+          button#9 9
+        div
+          button#4 4
+          button#5 5
+          button#6 6
+        div
+          button#1 1
+          button#2 2
+          button#3 3
+        div
+          button#zero 0
+          button#period .
+      div#right
+        button#minus -
+        div
+          button.tall#plus +
+        div
+          button.tall#enter =
+  audio#sndKeyDown(src=require('file!../assets/keydown.mp3'))
+  audio#sndKeyUp(src=require('file!../assets/keyup.mp3'))
+
